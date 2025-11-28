@@ -1,0 +1,16 @@
+# Environment variables
+.env
+*.env
+
+# CSV file from NYC 311
+data/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+scripts/__pycache__/
+
+# venv / virtual environments
+.venv/
+
+#GitHub
+init/

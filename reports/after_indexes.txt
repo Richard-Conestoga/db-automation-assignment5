@@ -1,0 +1,59 @@
+
+=== [after_indexes] Query: total_rows ===
+Time: 47.70 ms, rows returned: 1
+EXPLAIN ANALYZE:
+-> Count rows in service_requests  (actual time=51.2..51.2 rows=1 loops=1)
+
+
+=== [after_indexes] Query: by_borough ===
+Time: 88.69 ms, rows returned: 6
+EXPLAIN ANALYZE:
+-> Group aggregate: count(0)  (cost=41221 rows=5) (actual time=17.4..104 rows=6 loops=1)
+    -> Covering index scan on service_requests using idx_borough  (cost=21395 rows=198253) (actual time=0.0237..61.6 rows=200000 loops=1)
+
+
+=== [after_indexes] Query: year_2023_count ===
+Time: 204.55 ms, rows returned: 1
+EXPLAIN ANALYZE:
+-> Aggregate: count(0)  (cost=8107 rows=1) (actual time=224..224 rows=1 loops=1)
+    -> Filter: (service_requests.created_date between '2023-01-01' and '2023-12-31')  (cost=5904 rows=22025) (actual time=0.0308..211 rows=193314 loops=1)
+        -> Covering index skip scan on service_requests using idx_borough_created over '2023-01-01 00:00:00' <= created_date <= '2023-12-31 00:00:00'  (cost=5904 rows=22025) (actual time=0.0278..115 rows=193314 loops=1)
+
+
+=== [after_indexes] Query: top_complaints ===
+Time: 278.43 ms, rows returned: 10
+EXPLAIN ANALYZE:
+-> Limit: 10 row(s)  (actual time=263..263 rows=10 loops=1)
+    -> Sort: c DESC, limit input to 10 row(s) per chunk  (actual time=263..263 rows=10 loops=1)
+        -> Table scan on <temporary>  (actual time=263..263 rows=166 loops=1)
+            -> Aggregate using temporary table  (actual time=263..263 rows=166 loops=1)
+                -> Table scan on service_requests  (cost=21395 rows=198253) (actual time=0.0797..107 rows=200000 loops=1)
+
+
+=== [after_indexes] Query: like_noise ===
+Time: 158.88 ms, rows returned: 1
+EXPLAIN ANALYZE:
+-> Aggregate: count(0)  (cost=23598 rows=1) (actual time=162..162 rows=1 loops=1)
+    -> Filter: (service_requests.descriptor like '%noise%')  (cost=21395 rows=22026) (actual time=0.0389..162 rows=2685 loops=1)
+        -> Table scan on service_requests  (cost=21395 rows=198253) (actual time=0.0348..88.1 rows=200000 loops=1)
+
+
+=== [after_indexes] Query: like_heat ===
+Time: 141.53 ms, rows returned: 1
+EXPLAIN ANALYZE:
+-> Aggregate: count(0)  (cost=23598 rows=1) (actual time=153..153 rows=1 loops=1)
+    -> Filter: (service_requests.descriptor like '%heat%')  (cost=21395 rows=22026) (actual time=1.22..153 rows=93 loops=1)
+        -> Table scan on service_requests  (cost=21395 rows=198253) (actual time=0.0682..85.9 rows=200000 loops=1)
+
+
+=== [after_indexes_fulltext] Query: ft_noise ===
+Time: 5.28 ms, rows returned: 1
+EXPLAIN ANALYZE:
+-> Rows fetched before execution  (cost=0..0 rows=1) (actual time=90e-6..143e-6 rows=1 loops=1)
+
+
+=== [after_indexes_fulltext] Query: ft_heat_hot_water ===
+Time: 0.86 ms, rows returned: 1
+EXPLAIN ANALYZE:
+-> Rows fetched before execution  (cost=0..0 rows=1) (actual time=100e-6..173e-6 rows=1 loops=1)
+
