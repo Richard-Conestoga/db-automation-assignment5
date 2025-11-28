@@ -1,6 +1,4 @@
-## README outline (you can copy-paste and tweak)
-
-Title: NYC 311 Database Automation – Indexing and FULLTEXT Benchmark
+# Title: NYC 311 Database Automation – Indexing and FULLTEXT Benchmark
 
 ### Overview
 
