@@ -1,4 +1,4 @@
-# Title: NYC 311 Database Automation – Indexing and FULLTEXT Benchmark
+# NYC 311 Database Automation – Indexing and FULLTEXT Benchmark
 
 ### Overview
 
